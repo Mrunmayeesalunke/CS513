@@ -110,5 +110,19 @@ df <- na.omit(df)
 df <- subset(df, select=-Borough)
 
 #################################################
+# Delete Variables that predicted too well - didn't work with dtree
+df<-subset(df,select=-BldgClass) 
+df<-subset(df,select=-Sanborn) 
+df<-subset(df,select=-CT2010) 
+# Delete variables with more than 53 categories
+df<-subset(df,select=-CB2010)
+df<-subset(df,select=-ZipCode)
+df<-subset(df,select=-FireComp)
+df<-subset(df,select=-HealthArea)
+df<-subset(df,select=-SanitSub)
+df<-subset(df,select=-ZoneMap)
+
+summary(df)
+#################################################
 # Print to file
-write.csv(df, "nyc-buildings/BK_processed.csv")
+write.csv(df, "nyc-buildings/BK_processed.csv",row.names=FALSE)

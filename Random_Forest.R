@@ -18,26 +18,17 @@ filename<-"nyc-buildings/BK_processed.csv"
 df<-read.csv(filename, na.strings="")
 df
 
-#deleting variables that predicted too well and/or which had more variables for RF
+# Delete index, not for prediction
 df<-subset(df,select=-X)
-df<-subset(df,select=-BldgClass) 
-df<-subset(df,select=-Sanborn) 
-df<-subset(df,select=-CT2010) 
 
-df<-subset(df,select=-CB2010)
-df<-subset(df,select=-ZipCode)
-df<-subset(df,select=-FireComp)
-df<-subset(df,select=-HealthArea)
-df<-subset(df,select=-SanitSub)
-df<-subset(df,select=-ZoneMap)
 ####################################
 # Change to as factor
 df$Residential <- as.factor(df$Residential)
 
 
 index<-sort(sample(nrow(df),round(.05*nrow(df))))
-training<-df[-index,]
-test<-df[index,]
+#training<-df[-index,]
+#test<-df[index,]
 
 df2<-df[index,]
 
