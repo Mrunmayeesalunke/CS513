@@ -1,7 +1,7 @@
 #################################################
 #  Company     : Stevens 
 #  Project     : CS 513 Final Project-NYC Buildings Data
-#  Purpose     : Preliminary Work/Preprocessing
+#  Purpose     : Random Forest
 #  Names of the group members:
 #  Name 1      : Mrunmayee Salunke (10429075)
 #  Name 2      : Heli Choksi       (10430926)
@@ -12,49 +12,40 @@
 rm(list=ls())
 #################################################
 #Load Data
-?read.csv
 setwd("C:/Users/wzaml/Documents/Stevens/11_Spring2018/CS513_DataMining/CS513")
 filename<-"nyc-buildings/BK_processed.csv"
-df<-read.csv(filename, na.strings="")
-df
+df<-read.csv(filename)
 
 # Delete index, not for prediction
 df<-subset(df,select=-X)
-
 ####################################
-# Change to as factor
+# Change y to as factor
 df$Residential <- as.factor(df$Residential)
 
+# Split to training and test dataset
+index<-sort(sample(nrow(df),round(.25*nrow(df))))
+training<-df[-index,]
+test<-df[index,]
 
-index<-sort(sample(nrow(df),round(.05*nrow(df))))
-#training<-df[-index,]
-#test<-df[index,]
-
-df2<-df[index,]
-
-index2<-sort(sample(nrow(df2),round(.25*nrow(df2))))
-training<-df2[-index2,]
-test<-df2[index2,]
-
-#install packages
+# Install packages
 #install.packages('randomForest')
 
-#load the library
+# Load the library
 library(randomForest)
 
-#calculating randomforest
+# Calculating randomforest
 fit <- randomForest(Residential~.,data=training, importance=TRUE, ntree=5000)
 
 fit_importance <- importance(fit)
 fit_importance
 
-# get top 15 variables from importance
+# Get top 15 variables from importance - these will be used in future algoritms
 top_features <- sort(fit_importance[,3], decreasing=TRUE)[1:10]
 top_features
 
+# Check Results
 varImpPlot(fit)
 Prediction <- predict(fit, test)
-?predict
 table(actual=test$Residential,Prediction)
 
 wrong<- (test$Residential!=Prediction )
