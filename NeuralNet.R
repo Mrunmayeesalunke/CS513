@@ -18,8 +18,6 @@ df<-read.csv(filename)
 ####################################
 
 # Split to training and test dataset
-sub_index<-sort(sample(nrow(df),round(.25*nrow(df))))
-df <- df[sub_index,]
 index<-sort(sample(nrow(df),round(.25*nrow(df))))
 training<-df[-index,]
 test<-df[index,]
@@ -31,7 +29,7 @@ library("neuralnet")
 
 # Neural Net
 net_bc2  <- neuralnet(Residential ~ UnitsTotal+AssessTot+NumFloors+AssessLand+BldgArea+BuiltFAR+StrgeArea+GarageArea+BldgDepth+ExemptTot, 
-                      data=training, hidden=10, threshold=0.01)
+                      data=training, hidden=10, threshold=0.1, stepmax=2e+05)
 
 # Plot Neural Net
 plot(net_bc2)

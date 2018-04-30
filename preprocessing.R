@@ -14,8 +14,9 @@ rm(list=ls())
 
 #Load Data
 ?read.csv
-filename<-"C:/Users/wzaml/Documents/Stevens/11_Spring2018/CS513_DataMining/CS513/nyc-buildings/BK_sample.csv"
-df<-read.csv(filename, na.strings="")
+setwd("C:/Users/wzaml/Documents/Stevens/11_Spring2018/CS513_DataMining/CS513")
+filename<-"nyc-buildings/BK_sample.csv"
+df<-read.csv(filename, na.strings=c("", NA))
 df
 
 #Summarizing each column
@@ -102,9 +103,6 @@ df <- subset(df, select=-EDesigNum)
 #APPDate 18645
 df <- subset(df, select=-APPDate)
 
-# Removing other NA's
-df <- na.omit(df)
-
 #################################################
 # Remove duplicate Borough indicators
 df <- subset(df, select=-Borough)
@@ -121,6 +119,9 @@ df<-subset(df,select=-FireComp)
 df<-subset(df,select=-HealthArea)
 df<-subset(df,select=-SanitSub)
 df<-subset(df,select=-ZoneMap)
+
+# Removing other NA's
+df <- na.omit(df)
 
 summary(df)
 #################################################
