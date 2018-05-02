@@ -13,26 +13,35 @@ rm(list=ls())
 #################################################
 
 #Load Data
-df<- read.csv("C:/Users/mrunm/Desktop/CS513 Project/BK_processed.csv")
-df
-install.packages('clue')
+setwd("C:/Users/wzaml/Documents/Stevens/11_Spring2018/CS513_DataMining/CS513")
+filename<-"nyc-buildings/BK_processed.csv"
+df<-read.csv(filename)
+#install.packages('clue')
 library('clue')
 
-#df$Residential<-as.factor(df$Residential)
+## List features
+features<-c('UnitsTotal','AssessTot','NumFloors','AssessLand','BldgArea','BuiltFAR','StrgeArea','GarageArea','BldgDepth','ExemptTot')
+
+## Normalize the data
+for (i in features) {
+  df[i] <- (df[,i] - mean(df[,i])) / sd(df[,i])
+}
+
+# Split into training and test
 index<-sort(sample(nrow(df),round(.25*nrow(df))))
 training<-df[-index,]
 test<-df[index,]
 
-features<-c('UnitsTotal','AssessTot','NumFloors','AssessLand','BldgArea','BuiltFAR','StrgeArea','GarageArea','BldgDepth','ExemptTot')
+# H clust
 bc2_dist<-dist( df[,features])
 hclust_resutls<-hclust(bc2_dist)
 hclust_2<-cutree(hclust_resutls,2)
-table(hclust_2,df[,'Residential'])
+table(hclust=hclust_2,actual=df[,'Residential'])
 
-
+# Kmeans
 kmeans_2<- kmeans(training[,features],2,nstart = 10)
-kmeans_2$cluster
+#kmeans_2$cluster
 table(kmeans_2$cluster,training[,'Residential'])
 
 kmeans_predict<-cl_predict( kmeans_2, test[,features], type='class' )
-table(actual=test$Residential,kmeans=kmeans_predict)
+table(kmeans=kmeans_predict,actual=test$Residential)

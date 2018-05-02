@@ -24,12 +24,22 @@ library(e1071)
 
 features<-c('UnitsTotal','AssessTot','NumFloors','AssessLand','BldgArea','BuiltFAR','StrgeArea','GarageArea','BldgDepth','ExemptTot')
 
-nBayes <- naiveBayes(Residential ~ UnitsTotal+AssessTot+NumFloors+AssessLand+BldgArea+BuiltFAR+StrgeArea+GarageArea+BldgDepth+ExemptTot, data=df)
+## Normalize the data
+for (i in features) {
+  df[i] <- (df[,i] - mean(df[,i])) / sd(df[,i])
+}
+
+## Split into training and test set
+index<-sort(sample(nrow(df),round(.25*nrow(df))))
+training<-df[-index,]
+test<-df[index,]
+
+nBayes <- naiveBayes(Residential ~ UnitsTotal+AssessTot+NumFloors+AssessLand+BldgArea+BuiltFAR+StrgeArea+GarageArea+BldgDepth+ExemptTot, data=training)
 
 ## Naive Bayes classification using all variables 
-category<-predict(nBayes, df)
+category<-predict(nBayes, test[features])
 
-table(NBayes=category,Residential=df$Residential)
-NB_wrong<-sum(category!=df$Residential)
+table(NBayes=category,Residential=test$Residential)
+NB_wrong<-sum(category!=test$Residential)
 NB_error_rate<-NB_wrong/length(category)
 NB_error_rate

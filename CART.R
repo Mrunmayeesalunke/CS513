@@ -22,7 +22,9 @@ library(rattle)           # Fancy tree plot
 library(RColorBrewer)     # colors needed for rattle
 #########################################################
 ##  Step 2:  Loading the data
-df<- read.csv("C:/Users/mrunm/Desktop/CS513 Project/BK_processed.csv")
+setwd("C:/Users/wzaml/Documents/Stevens/11_Spring2018/CS513_DataMining/CS513")
+filename<-"nyc-buildings/BK_processed.csv"
+df<-read.csv(filename)
 #View(df)
 
 # Change y to as factor
@@ -49,3 +51,55 @@ table(actual=test$Residential,Prediction)
 wrong<- (test$Residential!=Prediction )
 error_rate<-sum(wrong)/length(wrong)
 error_rate 
+
+#################################################
+# Predict on different boroughs
+filename_BX<-"nyc-buildings/BX_processed.csv"
+df_BX<-read.csv(filename_BX)
+filename_MN<-"nyc-buildings/MN_processed.csv"
+df_MN<-read.csv(filename_MN)
+filename_QN<-"nyc-buildings/QN_processed.csv"
+df_QN<-read.csv(filename_QN)
+filename_SI<-"nyc-buildings/SI_processed.csv"
+df_SI<-read.csv(filename_SI)
+
+# BX Bronx
+# Prediction
+Prediction <- predict(CART_class, df_BX, type='class')
+table(actual=df_BX$Residential,Prediction)
+
+# Finding the Error Rate
+wrong<- (df_BX$Residential!=Prediction )
+error_rate<-sum(wrong)/length(wrong)
+error_rate 
+
+# MN Manhattan
+# Prediction
+Prediction <- predict(CART_class, df_MN, type='class')
+table(actual=df_MN$Residential,Prediction)
+
+# Finding the Error Rate
+wrong<- (df_MN$Residential!=Prediction )
+error_rate<-sum(wrong)/length(wrong)
+error_rate
+
+# QN Queens
+# Prediction
+Prediction <- predict(CART_class, df_QN, type='class')
+table(actual=df_QN$Residential,Prediction)
+
+# Finding the Error Rate
+wrong<- (df_QN$Residential!=Prediction )
+error_rate<-sum(wrong)/length(wrong)
+error_rate
+
+# SI Staten Island
+# Prediction
+Prediction <- predict(CART_class, df_SI, type='class')
+table(actual=df_SI$Residential,Prediction)
+
+# Finding the Error Rate
+wrong<- (df_SI$Residential!=Prediction )
+error_rate<-sum(wrong)/length(wrong)
+error_rate
+
